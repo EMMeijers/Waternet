@@ -1,3 +1,3 @@
 # R-functions
-R functions for Boezemmodel
+R functions for postrpocessing of Waternet Boezemmodel
 
