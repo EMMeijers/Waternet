@@ -22,10 +22,10 @@ An R array object of the Delwaq .his file named  \code{filename}.
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Erwin Meijers,
 }
 \note{
-%%  ~~further notes~~
+script based on his2arr from Willem Stolte
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -34,13 +34,12 @@ An R array object of the Delwaq .his file named  \code{filename}.
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-library(DelwaqR)
-arr <- his2arr(filename = "DATA/NZBLOOM.his", timestamp = F, begintime = "2003-01-01 00:00:00")
+library(Waternet)
+arr <- delwaq2arr(filename = "DATA/testdata.his")
 dimnames(arr)
-submod <- c("Chlfa", "OXY")
-locmod <- c("NZR6NW020", "NZR9TS010")
+submod <- c("OXY", "Cl")
+locmod <- c("LOX003", "LOX005", "LOX007", "LOX009")
 df <- arr2df(arr, locmod=locmod, submod=submod)
-df$value[df$variable == "fResptot"] <- -df$value[df$variable == "fResptot"]
 library(ggplot2)
 plot <- ggplot(df, aes(time, value))
 plot +
