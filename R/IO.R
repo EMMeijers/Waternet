@@ -7,18 +7,15 @@
 #' @return An R array object of the Delwaq <.his> or <.map> file named  \code{filename}.
 #' @examples
 #' library(Waternet)
-#' arr <- his2arr(filename = "DATA/NZBLOOM.his", timestamp = F, begintime = "2003-01-01 00:00:00")
-#' dimnames(arr)
-#' submod <- c("Chlfa", "OXY")
-#' locmod <- c("NZR6NW020", "NZR9TS010")
+#' arr <- delwaq2arr(filename = "DATA/testdata.his")
+#' submod <- c("OXY", "Cl")
+#' locmod <- c("LOX003","LOX009")
 #' df <- arr2df(arr, locmod=locmod, submod=submod)
-#' df$value[df$variable == "fResptot"] <- -df$value[df$variable == "fResptot"]
 #' library(ggplot2)
-#' plot <- ggplot(df, aes(time, value))
-#' plot +
+#' plot <- ggplot(df, aes(time, value)) +
 #'   geom_line(aes(color = variable), size = 1) +
-#'   geom_point(aes(color = variable), fill = "white",  shape = 21, size = 4) +
-#'   facet_grid((. ~ location))
+#'   facet_grid((variable ~ location), scales = "free")
+#' plot
 delwaq2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00"){
   
   `%not_in%` <- Negate(`%in%`)
@@ -126,4 +123,50 @@ get_data_vars <- function(data) {
 get_data_tims <- function(data) {
   tims <- attr(data, 'dimnames')[[1]] ## times
   return(tims)
+}
+#' extract data from array into a dataframe for selected locations and substances,
+#'
+#' @param arr the array to be extracted.
+#' @param locmod the locations in the array to be extracted
+#' @param submod the substances in the array to be extracted
+#' @return A dataframe with model output values for \code{submod} and \code{locmod}.
+#' @examples
+#' library(Waternet)
+#' arr <- delwaq2arr(filename = "DATA/testdata.his")
+#' submod <- c("OXY", "Cl")
+#' locmod <- c("LOX003","LOX009")
+#' df <- arr2df(arr, locmod=locmod, submod=submod)
+#' library(ggplot2)
+#' plot <- ggplot(df, aes(time, value)) +
+#'   geom_line(aes(color = variable), size = 1) +
+#'   facet_grid((variable ~ location), scales = "free")
+#' plot
+arr2df <- function(arr, locmod, submod) {
+  require(reshape2)
+  
+  if(length(submod) != 1 & length(locmod) != 1) {
+    df.mod <- melt(arr[, locmod, submod], varnames=c("time", "location", "variable"))
+  }
+  if(length(submod) == 1 & length(locmod) != 1) {
+    df.mod <- melt(arr[, locmod, submod], varnames=c("time", "location"))
+    df.mod$variable <- submod
+  }
+  if(length(locmod) == 1 & length(submod) != 1) {
+    df.mod <- melt(arr[, locmod, submod], varnames=c("time", "variable"))
+    df.mod$location <- locmod
+  }
+  if(length(locmod) == 1 & length(submod) == 1) {
+    df.mod <- melt(arr[, locmod, submod], varnames=c("time"))
+    df.mod$location <- locmod
+    df.mod$variable <- submod
+    df.mod$time <- row.names(df.mod)
+  }
+  
+  ifelse(nchar(as.character(df.mod$time[1])) < 19,
+         df.mod$time  <- as.POSIXct(x=df.mod$time, format = "%Y-%m-%d"),
+         df.mod$time  <- as.POSIXct(x=df.mod$time, format = "%Y-%m-%d %H:%M:%S")
+  )
+  df.mod$location  <- factor(df.mod$location,levels = locmod)
+  #df.mod$species   <- factor(df.mod$species, levels = submod)
+  return(df.mod)
 }
