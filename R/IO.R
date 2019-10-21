@@ -115,7 +115,7 @@ get_data_locs <- function(data) {
 #' @param 'data object (array).
 #' @return list of variables in data
 get_data_vars <- function(data) {
-  vars <- attr(data, 'dimnames')[[1]] ## locations
+  vars <- attr(data, 'dimnames')[[3]] ## variables
   return(vars)
 }
 
@@ -124,6 +124,6 @@ get_data_vars <- function(data) {
 #' @param 'data object (array).
 #' @return list of times in data
 get_data_tims <- function(data) {
-  tims <- attr(data, 'dimnames')[[3]] ## locations
+  tims <- attr(data, 'dimnames')[[1]] ## times
   return(tims)
 }
