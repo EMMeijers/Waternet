@@ -1,9 +1,9 @@
-\name{his2arr}
-\alias{his2arr}
+\name{delwaq2arr}
+\alias{delwaq2arr}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{convert Delwaq <.his> or <.map> file into an R array object}
+\title{convert Delwaq <.his> or <.map> file into a R array object}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function reads a delwaq binairy result file with extention <.map> or <.his> and put it into a R array object. 
 }
 \usage{
 delwaq2arr(filename, timestamp = T, begintime = "1900-01-01 00:00:00")
