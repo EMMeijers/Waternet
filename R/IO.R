@@ -1,13 +1,13 @@
 # IO functions:
 
 
-#' convert Delwaq <.map> or <.his> file into an R array object,
+#' convert SOBEK <.map> or <.his> file into an R array object,
 #'
 #' @param filename the <.his> or <.map> file to be converted.
-#' @return An R array object of the Delwaq <.his> or <.map> file named  \code{filename}.
+#' @return An R array object of the SOBEK <.his> or <.map> file named  \code{filename}.
 #' @examples
 #' library(Waternet)
-#' arr <- delwaq2arr(filename = "DATA/testdata.his")
+#' arr <- sobek2arr(filename = "DATA/testdata.his")
 #' submod <- c("OXY", "Cl")
 #' locmod <- c("LOX003","LOX009")
 #' df <- arr2df(arr, locmod=locmod, submod=submod)
@@ -16,7 +16,7 @@
 #'   geom_line(aes(color = variable), size = 1) +
 #'   facet_grid((variable ~ location), scales = "free")
 #' plot
-delwaq2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00"){
+sobek2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00"){
   
   `%not_in%` <- Negate(`%in%`)
   
@@ -170,3 +170,46 @@ arr2df <- function(arr, locmod, submod) {
   #df.mod$species   <- factor(df.mod$species, levels = submod)
   return(df.mod)
 }
+
+#' Get model results for different modelruns,
+#'
+#' Function to get modelresults for the same location and variables for multiple runs
+#' 
+#' @param filename the name of the file containg the binairy output
+#' @param locs list of locations to be be extracted
+#' @param vars list of variables to be be extracted
+#' @return A dataframe with model output values for \code{submod} and \code{locmod}.
+#' @examples
+#' library(Waternet)
+#' submod <- c("OXY", "Cl")
+#' locmod <- c("LOX003","LOX009")
+#' df <- get_model_data("DATA/testdata.his", locmod, submod)
+#' library(ggplot2)
+#' plot <- ggplot(df, aes(time, value)) +
+#'   geom_line(aes(color = variable), size = 1) +
+#'   facet_grid((variable ~ location), scales = "free")
+#' plot
+get_model_data <- function(filename, locs, vars, tag) {
+  #Model runs, loop, read results per run, add runidentifier as "tag":
+  data <- sobek2arr(filename)
+  tim.attr <- attr(data, 'dimnames')[[1]] ## times
+  loc.attr <- attr(data, 'dimnames')[[2]] ## locations
+  var.attr <- attr(data, 'dimnames')[[3]] ## substances
+  
+  c.locs <- setdiff(locs, loc.attr)
+  if (length(c.locs) != 0) {
+    print(paste("Location is missing:",setdiff(locs, loc.attr)))
+    print(paste("available: ", loc.attr))}
+  
+  c.subs <- setdiff(vars, var.attr)
+  if (length(c.subs) != 0) {
+    print(paste("Variable is missing:",setdiff(vars, var.attr)))
+    print(paste("available: ", var.attr))}
+  
+  rundata <- arr2df(data,as.character(locs),vars) 
+  
+  rm(data)
+  
+  return(rundata)
+}
+
