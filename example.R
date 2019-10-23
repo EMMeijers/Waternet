@@ -47,3 +47,13 @@ plot <- ggplot(df, aes(time, value)) +
   geom_line(aes(color = tag), size = 1) +
   facet_grid((variable ~ location), scales = "free")
 plot
+
+### Check for incorrect column names:
+
+fn  <- c("DATA/testdata.his",
+               "DATA/testdata2.his")
+tag2      <- c("run 1",
+              "run 2")
+runs2 <- data.frame(fn, tag2)
+df <- get_runs_data(runs2, locmod, submod)
+

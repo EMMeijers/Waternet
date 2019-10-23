@@ -1,7 +1,9 @@
 # Helper functions, private use within the Waternet lib.
+`%not_in%` <- Negate(`%in%`)
+
 
 .check_df_names <- function(df, headers) {
-  `%not_in%` <- Negate(`%in%`)
+  #`%not_in%` <- Negate(`%in%`)
   pass <- T
   for (colname in headers) {
     if (colname %not_in% names(df)) {
@@ -11,3 +13,4 @@
   }
   if (!pass) {stop("dataframe is missing correct headers")}
 }
+
