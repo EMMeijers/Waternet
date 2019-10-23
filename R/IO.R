@@ -239,12 +239,14 @@ get_model_data <- function(filename, locs, vars) {
 get_runs_data <- function(runs, locs, vars) {
   # check on column names:
   `%not_in%` <- Negate(`%in%`)
-  if ("filename" %not_in% names(runs)) {
-    stop("runs dataframe is either missing the <filename> column")
-  }
-  if ("tag" %not_in% names(runs)) {
-    stop("runs dataframe is either missing the <run> column")
-  }  
+  chk <- c("filename", "tag")
+  .check_df_names(runs, chk)
+  # if ("filename" %not_in% names(runs)) {
+  #   stop("runs dataframe is missing the <filename> column")
+  # }
+  # if ("tag" %not_in% names(runs)) {
+  #   stop("runs dataframe is missing the <run> column")
+  # }  
   
   list.tmp <- list() 
   ilist <- 1
