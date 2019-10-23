@@ -21,7 +21,6 @@ sobek2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00
   `%not_in%` <- Negate(`%in%`)
   
   fn.ext <- toupper(substr(filename, nchar(filename) - 3, nchar(filename)))
-  
   library("stringr")
   if (fn.ext %not_in% c(".HIS", ".MAP")) { 
     stop("filename does not seem to be a <.his> of <.map> file")
@@ -189,8 +188,7 @@ arr2df <- function(arr, locmod, submod) {
 #'   geom_line(aes(color = variable), size = 1) +
 #'   facet_grid((variable ~ location), scales = "free")
 #' plot
-get_model_data <- function(filename, locs, vars, tag) {
-  #Model runs, loop, read results per run, add runidentifier as "tag":
+get_model_data <- function(filename, locs, vars) {
   data <- sobek2arr(filename)
   tim.attr <- attr(data, 'dimnames')[[1]] ## times
   loc.attr <- attr(data, 'dimnames')[[2]] ## locations
@@ -213,3 +211,56 @@ get_model_data <- function(filename, locs, vars, tag) {
   return(rundata)
 }
 
+
+#' Get model results for different modelruns,
+#'
+#' Function to get modelresults for the same location and variables for multiple runs
+#' 
+#' @param runs dataframe containing columns  <path> and <tag>"
+#' @param filename the name of the file containg the binairy output
+#' @param locs list of locations to be be extracted
+#' @param vars list of variables to be be extracted
+#' @return A dataframe with model output values for \code{submod} and \code{locmod}.
+#' @examples
+#' library(Waternet)
+#' filename  <- c("DATA/testdata.his",
+#'                "DATA/testdata2.his")
+#' tag      <- c("run 1",
+#'               "run 2")
+#' runs <- data.frame(filename, tag)
+#' submod <- c("OXY", "Cl")
+#' locmod <- c("LOX003","LOX009")
+#' df <- get_model_data("DATA/testdata.his", locmod, submod)
+#' library(ggplot2)
+#' plot <- ggplot(df, aes(time, value)) +
+#'   geom_line(aes(color = variable), size = 1) +
+#'   facet_grid((variable ~ location), scales = "free")
+#' plot
+get_runs_data <- function(runs, locs, vars) {
+  # check on column names:
+  `%not_in%` <- Negate(`%in%`)
+  if ("filename" %not_in% names(runs)) {
+    stop("runs dataframe is either missing the <filename> column")
+  }
+  if ("tag" %not_in% names(runs)) {
+    stop("runs dataframe is either missing the <run> column")
+  }  
+  
+  list.tmp <- list() 
+  ilist <- 1
+  #Model runs, loop, read results per run, add runidentifier as "tag":
+  for (irun in 1:nrow(runs)){
+    fn <- as.character(runs$filename[irun])
+    tmp <- get_model_data(fn, locs, vars)
+    
+    # add tag to df:
+    tmp$tag <- runs$tag[irun]
+    list.tmp[[ilist]] <- tmp
+    # Increase counter for resullts list
+    ilist <- ilist + 1
+    
+  }
+  rundata <- do.call("rbind",list.tmp) #combine all vectors into a matrix
+  
+  return(rundata)
+}
