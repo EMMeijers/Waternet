@@ -4,10 +4,10 @@
 \alias{get_data_tims}
 \title{Get times from data array,}
 \usage{
-get_data_tims(data)
+get_data_tims(arr)
 }
 \arguments{
-\item{'data}{object (array).}
+\item{arr}{data object (array).}
 }
 \value{
 list of times in data

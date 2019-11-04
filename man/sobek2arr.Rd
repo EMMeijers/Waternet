@@ -17,7 +17,7 @@ convert SOBEK <.map> or <.his> file into an R array object,
 }
 \examples{
 library(Waternet)
-arr <- sobek2arr(filename = "DATA/testdata.his")
+arr <- sobek2arr(filename = "data/testdata.his")
 submod <- c("OXY", "Cl")
 locmod <- c("LOX003","LOX009")
 df <- arr2df(arr, locmod=locmod, submod=submod)

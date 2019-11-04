@@ -21,7 +21,7 @@ extract data from array into a dataframe for selected locations and substances,
 }
 \examples{
 library(Waternet)
-arr <- delwaq2arr(filename = "DATA/testdata.his")
+arr <- sobek2arr(filename = "data/testdata.his")
 submod <- c("OXY", "Cl")
 locmod <- c("LOX003","LOX009")
 df <- arr2df(arr, locmod=locmod, submod=submod)

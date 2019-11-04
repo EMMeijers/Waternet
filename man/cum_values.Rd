@@ -15,7 +15,8 @@ cum_values(df, debug = F)
 An R dataframe containing cumnulative values, based on value * dt.
 }
 \description{
-Function to compute cumulative values, i,e. cumulative volumes based on flow values (m3/s) and the dt (s) in the dataset
+Function to compute cumulative values, i,e. cumulative volumes based on flow values (m3/s) and the dt (s) in the dataset.
+Cum values are resetted every year.
 }
 \examples{
 library(Waternet)

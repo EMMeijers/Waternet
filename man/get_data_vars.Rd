@@ -4,10 +4,10 @@
 \alias{get_data_vars}
 \title{Get varabeles from data array,}
 \usage{
-get_data_vars(data)
+get_data_vars(arr)
 }
 \arguments{
-\item{'data}{object (array).}
+\item{arr}{data object (array).}
 }
 \value{
 list of variables in data

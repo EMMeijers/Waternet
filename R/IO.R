@@ -7,7 +7,7 @@
 #' @return An R array object of the SOBEK <.his> or <.map> file named  \code{filename}.
 #' @examples
 #' library(Waternet)
-#' arr <- sobek2arr(filename = "DATA/testdata.his")
+#' arr <- sobek2arr(filename = "data/testdata.his")
 #' submod <- c("OXY", "Cl")
 #' locmod <- c("LOX003","LOX009")
 #' df <- arr2df(arr, locmod=locmod, submod=submod)
@@ -19,6 +19,7 @@
 sobek2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00"){
   
   `%not_in%` <- Negate(`%in%`)
+  if (typeof(filename) != "character") {filename <- as.character(filename)}
   
   fn.ext <- toupper(substr(filename, nchar(filename) - 3, nchar(filename)))
   library("stringr")
@@ -99,30 +100,31 @@ sobek2arr <- function (filename, timestamp = T, begintime = "1900-01-01 00:00:00
 
 #' Get locations from data array,
 #'
-#' @param 'data object (array).
+#' @param arr data object (array).
 #' @return list of locations in data
-get_data_locs <- function(data) {
+get_data_locs <- function(arr) {
   locs <- attr(data, 'dimnames')[[2]] ## locations
   return(locs)
 }
 
 #' Get varabeles from data array,
 #'
-#' @param 'data object (array).
+#' @param arr data object (array).
 #' @return list of variables in data
-get_data_vars <- function(data) {
+get_data_vars <- function(arr) {
   vars <- attr(data, 'dimnames')[[3]] ## variables
   return(vars)
 }
 
 #' Get times from data array,
 #'
-#' @param 'data object (array).
+#' @param arr data object (array).
 #' @return list of times in data
-get_data_tims <- function(data) {
+get_data_tims <- function(arr) {
   tims <- attr(data, 'dimnames')[[1]] ## times
   return(tims)
 }
+
 #' extract data from array into a dataframe for selected locations and substances,
 #'
 #' @param arr the array to be extracted.
@@ -131,7 +133,7 @@ get_data_tims <- function(data) {
 #' @return A dataframe with model output values for \code{submod} and \code{locmod}.
 #' @examples
 #' library(Waternet)
-#' arr <- delwaq2arr(filename = "DATA/testdata.his")
+#' arr <- sobek2arr(filename = "data/testdata.his")
 #' submod <- c("OXY", "Cl")
 #' locmod <- c("LOX003","LOX009")
 #' df <- arr2df(arr, locmod=locmod, submod=submod)
@@ -182,7 +184,7 @@ arr2df <- function(arr, locmod, submod) {
 #' library(Waternet)
 #' submod <- c("OXY", "Cl")
 #' locmod <- c("LOX003","LOX009")
-#' df <- get_model_data("DATA/testdata.his", locmod, submod)
+#' df <- get_model_data("data/testdata.his", locmod, submod)
 #' library(ggplot2)
 #' plot <- ggplot(df, aes(time, value)) +
 #'   geom_line(aes(color = variable), size = 1) +
@@ -223,14 +225,14 @@ get_model_data <- function(filename, locs, vars) {
 #' @return A dataframe with model output values for \code{submod} and \code{locmod}.
 #' @examples
 #' library(Waternet)
-#' filename  <- c("DATA/testdata.his",
-#'                "DATA/testdata2.his")
+#' filename  <- c("data/testdata.his",
+#'                "data/testdata2.his")
 #' tag      <- c("run 1",
 #'               "run 2")
 #' runs <- data.frame(filename, tag)
 #' submod <- c("OXY", "Cl")
 #' locmod <- c("LOX003","LOX009")
-#' df <- get_model_data("DATA/testdata.his", locmod, submod)
+#' df <- get_model_data("data/testdata.his", locmod, submod)
 #' library(ggplot2)
 #' plot <- ggplot(df, aes(time, value)) +
 #'   geom_line(aes(color = variable), size = 1) +
@@ -241,13 +243,7 @@ get_runs_data <- function(runs, locs, vars) {
   `%not_in%` <- Negate(`%in%`)
   chk <- c("filename", "tag")
   .check_df_names(runs, chk)
-  # if ("filename" %not_in% names(runs)) {
-  #   stop("runs dataframe is missing the <filename> column")
-  # }
-  # if ("tag" %not_in% names(runs)) {
-  #   stop("runs dataframe is missing the <run> column")
-  # }  
-  
+
   list.tmp <- list() 
   ilist <- 1
   #Model runs, loop, read results per run, add runidentifier as "tag":

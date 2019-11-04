@@ -4,10 +4,10 @@
 \alias{get_data_locs}
 \title{Get locations from data array,}
 \usage{
-get_data_locs(data)
+get_data_locs(arr)
 }
 \arguments{
-\item{'data}{object (array).}
+\item{arr}{data object (array).}
 }
 \value{
 list of locations in data

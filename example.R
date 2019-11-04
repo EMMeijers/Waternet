@@ -57,3 +57,17 @@ tag2      <- c("run 1",
 runs2 <- data.frame(fn, tag2)
 df <- get_runs_data(runs2, locmod, submod)
 
+
+### Get data, make cum value plot:
+library(Waternet)
+submod <- c("OXY")
+locmod <- c("LOX010")
+df <- get_model_data("DATA/testdata.his", locmod, submod)
+                     
+df.cum <- cum_values(df, debug=T)
+library(ggplot2)
+plot <- ggplot(df.cum, aes(time, value.cum)) +
+  geom_line(aes(color = variable), size = 1) +
+  facet_grid((variable ~ location), scales = "free")
+plot
+

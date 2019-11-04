@@ -23,7 +23,7 @@ Function to get modelresults for the same location and variables for multiple ru
 library(Waternet)
 submod <- c("OXY", "Cl")
 locmod <- c("LOX003","LOX009")
-df <- get_model_data("DATA/testdata.his", locmod, submod)
+df <- get_model_data("data/testdata.his", locmod, submod)
 library(ggplot2)
 plot <- ggplot(df, aes(time, value)) +
   geom_line(aes(color = variable), size = 1) +

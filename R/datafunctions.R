@@ -3,7 +3,8 @@
 
 #' Create cumulative plots for dicharge series,
 #'
-#' Function to compute cumulative values, i,e. cumulative volumes based on flow values (m3/s) and the dt (s) in the dataset 
+#' Function to compute cumulative values, i,e. cumulative volumes based on flow values (m3/s) and the dt (s) in the dataset.
+#' Cum values are resetted every year. 
 #'
 #' @param df the input dataframe, containing <time>, <location>, <variable>, <value> values
 #' @param debug flag for debug output, default = FALSE
@@ -33,7 +34,6 @@ cum_values <- function(df, debug = F) {
   dt <- as.numeric(df.tmp$time[2]) - as.numeric(df.tmp$time[1])
   
   # check for column named <tag>
-  # `%not_in%` <- Negate(`%in%`)
   if ("tag" %not_in% names(df.tmp)) {
     print("column <tag> added with value \"model\"")
     df.tmp$tag <- "model"
@@ -59,7 +59,8 @@ cum_values <- function(df, debug = F) {
                    variable == var,
                    tag == tag) %>%
             arrange(time) %>%
-            mutate(value.cum = cumsum(value*dt))
+            mutate(value.cum = cumsum(value*dt)) %>%
+            select(-year())
           
           list.tmp[[ilist]] <- tmp
           # Increase counter for resullts list
