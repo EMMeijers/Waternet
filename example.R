@@ -71,3 +71,24 @@ plot <- ggplot(df.cum, aes(time, value.cum)) +
   facet_grid((variable ~ location), scales = "free")
 plot
 
+### Add RotatedMarker to leaflet map:
+library(Waternet)
+library(leaflet)
+library(htmltools)
+library(htmlwidgets)
+# create df with columns <filename> and <tag>: 
+lat  <- c(52, 53)
+lon      <- c(8.89,9.1)
+name <- c("pointing North", "Pointing East")
+angle <- c(0,90)
+value <- c(1,2)
+df <- data.frame(name, angle, value, lat,lon)
+
+bins <- c(0,1,2,Inf)
+# Add leaflet map:
+m <- leaflet() %>% 
+  addProviderTiles(providers$Esri.WorldTopoMap)
+
+m <- RotatedMarker.layer(m, df, "unit", "default-layer", bins)
+
+  

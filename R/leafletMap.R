@@ -14,6 +14,7 @@
         }
       }
       if (!found) {
+        for (lib.path in .libPaths()) {print(paste(fn, "- not found in:", lib.path))}
         stop(paste("file could not be copied:", fn))
       }
       print(paste("file copied to workdir:", fn))
@@ -21,6 +22,10 @@
   }
 }
 
+.registerPlugin <- function(map, plugin) {
+  map$dependencies <- c(map$dependencies, list(plugin))
+  map
+}
 
 #' Add a leaflet layer containing rotated arrows:
 #'
@@ -45,7 +50,7 @@ RotatedMarker.layer <- function(map, data, unit,grouplayer, bins, plot.angle = T
   
   # Set columnnames to lower case:
   colnames(data) <- tolower(colnames(data))
-  .check_df_names(runs, c("value", "angle", "lat", "lon", "name"))
+  .check_df_names(data, c("value", "angle", "lat", "lon", "name"))
   
   labels <- sprintf(
     "<strong>%s</strong><br>%s %s",
@@ -65,15 +70,12 @@ RotatedMarker.layer <- function(map, data, unit,grouplayer, bins, plot.angle = T
                     , script = "leaflet.rotatedMarker.js")
   
   # this is taken from: https://gist.github.com/jcheng5/c084a59717f18e947a17955007dc5f92
-  .registerPlugin <- function(map, plugin) {
-    map$dependencies <- c(map$dependencies, list(plugin))
-    map
-  }
+
   
   
   # Add RotatedMarkers:
   tmp.map <- map %>%
-    registerPlugin( plugin = rotatedMarker ) %>%
+    .registerPlugin( plugin = .rotatedMarker ) %>%
     addCircleMarkers(data = data,
                      lng = ~lon,
                      lat = ~lat,
@@ -87,7 +89,7 @@ RotatedMarker.layer <- function(map, data, unit,grouplayer, bins, plot.angle = T
       addMarkers(data = data,
                  lng = ~lon,
                  lat = ~lat,
-                 icon = north.arrow.icon,
+                 icon = .north.arrow.icon,
                  options = markerOptions(rotationAngle = ~angle), 
                  group = grouplayer, 
                  label = labels)
