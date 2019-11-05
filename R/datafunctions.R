@@ -25,17 +25,18 @@ cum_values <- function(df, debug = F) {
   library(lubridate)
   
   .check_df_names(df,c("time", "variable", "location", "value") )
-  print("here")
   df.tmp <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
+  if (debug) {print(head(df.tmp))}
   
   # Get dt:
   dt <- as.numeric(df.tmp$time[2]) - as.numeric(df.tmp$time[1])
+  if (debug) {print(paste("timestep =", dt))}
   
   # check for column named <tag>
   if ("tag" %not_in% names(df.tmp)) {
-    print("column <tag> added with value \"model\"")
+    print("column <tag> added with  label model")
     df.tmp$tag <- "model"
   }
   
@@ -53,6 +54,8 @@ cum_values <- function(df, debug = F) {
     for (loc in locs) {
       for (var in vars) {
         for (tag in tags) {
+          if (debug) {print(tag)}
+          
           tmp <- df.tmp %>%
             filter(year == y,
                    location == loc,
@@ -60,8 +63,8 @@ cum_values <- function(df, debug = F) {
                    tag == tag) %>%
             arrange(time) %>%
             mutate(value.cum = cumsum(value*dt)) %>%
-            select(-year())
-          
+            select(-year)
+                   
           list.tmp[[ilist]] <- tmp
           # Increase counter for resullts list
           ilist <- ilist + 1

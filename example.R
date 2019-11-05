@@ -64,7 +64,7 @@ submod <- c("OXY")
 locmod <- c("LOX010")
 df <- get_model_data("DATA/testdata.his", locmod, submod)
                      
-df.cum <- cum_values(df, debug=T)
+df.cum <- cum_values(df, debug=F)
 library(ggplot2)
 plot <- ggplot(df.cum, aes(time, value.cum)) +
   geom_line(aes(color = variable), size = 1) +
@@ -78,7 +78,7 @@ library(htmltools)
 library(htmlwidgets)
 # create df with columns <filename> and <tag>: 
 lat  <- c(52, 53)
-lon      <- c(8.89,9.1)
+lon      <- c(4.89,5.1)
 name <- c("pointing North", "Pointing East")
 angle <- c(0,90)
 value <- c(1,2)
@@ -89,6 +89,6 @@ bins <- c(0,1,2,Inf)
 m <- leaflet() %>% 
   addProviderTiles(providers$Esri.WorldTopoMap)
 
-m <- RotatedMarker.layer(m, df, "unit", "default-layer", bins)
-
+m <- RotatedMarker.layer(m, df, "m3/uur", "pietje", bins)
+m
   
