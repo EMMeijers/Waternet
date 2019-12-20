@@ -14,10 +14,6 @@ plot <- ggplot(df, aes(time, value)) +
   facet_grid((variable ~ location), scales = "free")
 plot
 
-### Get vars, locations 
-get_data_locs(arr)
-get_data_vars(arr)
-
 
 ### Get model results, make plot:
 library(Waternet)
@@ -91,4 +87,17 @@ m <- leaflet() %>%
 
 m <- RotatedMarker.layer(m, df, "m3/uur", "pietje", bins)
 m
-  
+
+library(Waternet)
+locs <- get_his_locs("DATA/testdata.his")
+vars <- get_his_vars("DATA/testdata.his")
+
+library(Waternet)
+tmp <- OpenHISFile("DATA/testdata.his")
+tmp$Header
+tmp$T0
+tmp$TUnit
+tmp$TStep
+
+
+df <- ReadHISFile()

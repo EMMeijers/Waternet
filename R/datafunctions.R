@@ -21,8 +21,8 @@
 #'   facet_grid((variable ~ location), scales = "free")
 #' plot
 cum_values <- function(df, debug = F) {
-  library(dplyr)
-  library(lubridate)
+  require(dplyr)
+  require(lubridate)
   
   .check_df_names(df,c("time", "variable", "location", "value") )
   df.tmp <- df %>%
