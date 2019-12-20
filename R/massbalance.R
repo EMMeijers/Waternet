@@ -9,7 +9,7 @@
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @param f.meteotype filter for meteotypes, as integer 
 #' @return An R dataframe containing loads per balance term
-loads_in_swt_meteotype <- function(df.bal, f.subs ="all", f.meteotype = NULL) {
+loads_in_swt_meteotype <- function(df.bal, f.subs ="all", f.meteotype = NULL, debug = F) {
   require(dplyr)
   
   .check_df_names(df.bal,c("stof","tag","month","year","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
@@ -53,7 +53,7 @@ loads_in_swt_meteotype <- function(df.bal, f.subs ="all", f.meteotype = NULL) {
 #' <term>, <richting>, <surface_m2>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe containing loads per balance term
-loads_in_swt_month <- function(df.bal, f.subs ="all") {
+loads_in_swt_month <- function(df.bal, f.subs ="all", debug = F) {
   require(dplyr)
   
   .check_df_names(df.bal,c("stof","tag","month","year","location","term", "richting", "surface_m2") )
@@ -90,7 +90,7 @@ loads_in_swt_month <- function(df.bal, f.subs ="all") {
 #' <richting>, <volume_m3>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe HRT per Mass balance area
-hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL){
+hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL, debug = F){
   require(dplyr)
   
   .check_df_names(df.bal,c("stof","tag", "month","year", "meteotype", "meteotype_label","location", "richting", "volume_m3") )
@@ -132,7 +132,7 @@ hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL){
 #' <richting>, <volume_m3>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe HRT per Mass balance area
-hrt_swt_month <- function(df.bal, f.meteotype = NULL){
+hrt_swt_month <- function(df.bal, f.meteotype = NULL, debug = F){
   require(dplyr)
   
   .check_df_names(df.bal,c("stof","tag", "month","year","location", "richting", "volume_m3") )
