@@ -3,6 +3,7 @@
 
 .check_df_names <- function(df, headers) {
   pass <- T
+  colname(df) <- tolower(colnames(df))
   for (colname in headers) {
     if (colname %not_in% names(df)) {
       print(paste0("input dataframe is missing the <",colname,"> column"))
