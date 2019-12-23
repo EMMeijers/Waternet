@@ -1,7 +1,7 @@
 ### Example Get results from HIS file, convert to df, make plot:
 
 library(devtools)
-install_github("EMMeijers/Waternet")
+install_github("EMMeijers/Waternet", upgrade = FALSE)
 
 library(Waternet)
 arr <- sobek2arr(filename = "DATA/testdata.his")

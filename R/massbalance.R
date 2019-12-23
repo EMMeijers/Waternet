@@ -4,32 +4,32 @@
 #' Function to compute the load in a mass balance area per meteotype
 #' Meteotypes are periods of more or less equal hydrological conditions, ie dry summers, wet summer, etc.
 #'
-#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>, <meteotype>, <meteotype_label>,
+#' @param df the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>, <meteotype>, <meteotype_label>,
 #' <term>, <richting>, <surface_m2>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @param f.meteotype filter for meteotypes, as integer 
 #' @return An R dataframe containing loads per balance term
-loads_in_swt_meteotype <- function(df.bal, f.subs ="all", f.meteotype = NULL, debug = F) {
+loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug = F) {
   require(dplyr)
   
-  .check_df_names(df.bal,c("stof","tag","month","year","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
-  df.tmp <- df %>%
+  .check_df_names(df,c("stof","tag","month","year","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
+  df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
-  if (debug) {print(head(df.tmp))}
+  if (debug) {print(head(df))}
   
   
   # filters:
   if (f.subs != "all") {
-    df.bal <- df.bal %>%
+    df <- df %>%
       filter(stof %in% f.subs)
   }
   if (is.numeric(f.meteotype)) {
-    df.bal <- df.bal %>%
+    df <- df %>%
       filter(meteotype %in% f.meteotype)
   }
   
-  df.load <- df.bal %>%
+  df.load <- df %>%
     filter(richting == "In",
            value != 0) %>%
     group_by(stof,tag,month,year,location, meteotype_label,term, richting, surface_m2) %>%
@@ -43,34 +43,35 @@ loads_in_swt_meteotype <- function(df.bal, f.subs ="all", f.meteotype = NULL, de
     ungroup()
   
   return(df.load)
+  rm(df.load)
 }
 
 #' Aggregate loads per Mass balance area, term, substance and month
 #'
 #' Function to compute the load in a mass balance area on a monthly interval
 #'
-#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,
+#' @param df the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,
 #' <term>, <richting>, <surface_m2>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe containing loads per balance term
-loads_in_swt_month <- function(df.bal, f.subs ="all", debug = F) {
+loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
   require(dplyr)
   
-  .check_df_names(df.bal,c("stof","tag","month","year","location","term", "richting", "surface_m2") )
-  df.tmp <- df %>%
+  .check_df_names(df,c("stof","tag","month","year","location","term", "richting", "surface_m2") )
+  df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
-  if (debug) {print(head(df.tmp))}
+  if (debug) {print(head(df))}
   
   
   # filters:
   if (f.subs != "all") {
-    df.bal <- df.bal %>%
+    df <- df %>%
       filter(stof %in% f.subs)
   }
   
   
-  df.load <- df.bal %>%
+  df.load <- df %>%
     filter(richting == "In",
            value != 0) %>%
     group_by(stof,month,year, meteotype_label,location, tag,term, richting, surface_m2) %>%
@@ -79,6 +80,7 @@ loads_in_swt_month <- function(df.bal, f.subs ="all", debug = F) {
     ungroup()
   
   return(df.load)
+  rm(df.load)
 }
 
 #' Compute HRT per Mass balance area per meteotype
@@ -86,25 +88,25 @@ loads_in_swt_month <- function(df.bal, f.subs ="all", debug = F) {
 #' Function to compute the HRT in a mass balance area per meteotype
 #' Meteotypes are periods of more or less equal hydrological conditions, ie dry summers, wet summer, etc.
 #'
-#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,<meteotype>, <meteotype_label>,
+#' @param df the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,<meteotype>, <meteotype_label>,
 #' <richting>, <volume_m3>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe HRT per Mass balance area
-hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL, debug = F){
+hrt_swt_meteotype <- function(df, f.meteotype = NULL, debug = F){
   require(dplyr)
   
-  .check_df_names(df.bal,c("stof","tag", "month","year", "meteotype", "meteotype_label","location", "richting", "volume_m3") )
-  df.tmp <- df %>%
+  .check_df_names(df,c("stof","tag", "month","year", "meteotype", "meteotype_label","location", "richting", "volume_m3") )
+  df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
-  if (debug) {print(head(df.tmp))}
+  if (debug) {print(head(df))}
   
   #filter on meteotypes:
   if (is.numeric(f.meteotype)) {
-    df.bal <- df.bal %>%
+    df <- df %>%
       filter(meteotype %in% f.meteotype)
   }
-  df.HRT <- df.bal %>%
+  df.HRT <- df %>%
     filter(stof == "Continuity",
            richting != "-") %>%
     group_by(stof,meteotype,meteotype_label,month,year,location, richting, volume_m3, tag) %>%
@@ -121,6 +123,7 @@ hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL, debug = F){
     spread(meteotype, HRT)
   
   return(df.HRT.tabel)
+  rm(df.HRT, df.HTR.tabel)
 }
 
 
@@ -128,21 +131,21 @@ hrt_swt_meteotype <- function(df.bal, f.meteotype = NULL, debug = F){
 #'
 #' Function to compute the HRT in a mass balance area per month
 #'
-#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
+#' @param df the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
 #' <richting>, <volume_m3>
 #' @param f.subs filter for substances, by default set to "all" to process all variables available in the <variable> column
 #' @return An R dataframe HRT per Mass balance area
-hrt_swt_month <- function(df.bal, f.meteotype = NULL, debug = F){
+hrt_swt_month <- function(df, f.meteotype = NULL, debug = F){
   require(dplyr)
   
-  .check_df_names(df.bal,c("stof","tag", "month","year","location", "richting", "volume_m3") )
-  df.tmp <- df %>%
+  .check_df_names(df,c("stof","tag", "month","year","location", "richting", "volume_m3") )
+  df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
-  if (debug) {print(head(df.tmp))}
+  if (debug) {print(head(df))}
   
   
-  df.HRT <- df.bal %>%
+  df.HRT <- df %>%
     filter(stof == "Continuity",
            richting != "-") %>%
     group_by(stof,month,year,location, richting, volume_m3, tag) %>%
@@ -153,6 +156,7 @@ hrt_swt_month <- function(df.bal, f.meteotype = NULL, debug = F){
   
   
   return(df.HRT)
+  rm(df.HRT)
 }
 
 
