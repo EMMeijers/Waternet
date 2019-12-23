@@ -61,7 +61,7 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
   require(tidyr)
   
   
-  .check_df_names(df,c("stof","tag","month","year","location","term", "richting", "surface_m2") )
+  .check_df_names(df,c("stof","tag","month","year","meteotype_label","location","term", "richting", "surface_m2") )
   df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
@@ -78,7 +78,7 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
   df.load <- df %>%
     filter(richting == "In",
            value != 0) %>%
-    group_by(stof,month,year,location, tag,term, richting, surface_m2) %>%
+    group_by(stof,month,year,meteotype_label,location, tag,term, richting, surface_m2) %>%
     summarise(load = sum(value)/(365/12)) %>%
     mutate(eenheid = "g/dag") %>%
     ungroup()
@@ -145,7 +145,7 @@ hrt_swt_month <- function(df, f.meteotype = NULL, debug = F){
   require(dplyr)
   require(tidyr)
   
-  .check_df_names(df,c("stof","tag", "month","year","location", "richting", "volume_m3") )
+  .check_df_names(df,c("stof","tag", "month","year","meteotype_label","location", "richting", "volume_m3") )
   df <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
@@ -155,7 +155,7 @@ hrt_swt_month <- function(df, f.meteotype = NULL, debug = F){
   df.HRT <- df %>%
     filter(stof == "Continuity",
            richting != "-") %>%
-    group_by(stof,month,year,location, richting, volume_m3, tag) %>%
+    group_by(stof,month,year,meteotype_label,location, richting, volume_m3, tag) %>%
     summarise(m3_dag = sum(value) / (365/12)) %>%
     spread(richting, m3_dag) %>%
     mutate(HRT = round(volume_m3/-Out,2)) %>%
