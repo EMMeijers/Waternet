@@ -93,7 +93,7 @@ wqmeas_swt_meteotype <- function(df.map, df.wq, df.period, swt, f.meteotype = NU
   require(dplyr)
   
   # Check header of WQ dataframe
-  .check_df_names(df.wq,c("datum","meetpunt.id","meetwaarde","parameternaam","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
+  .check_df_names(df.wq,c("datum","meetpunt.id","meetwaarde","parameternaam") )
   
   
   if (is.numeric(f.meteotype)) {
