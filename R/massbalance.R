@@ -11,6 +11,8 @@
 #' @return An R dataframe containing loads per balance term
 loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug = F) {
   require(dplyr)
+  require(tidyr)
+  
   
   .check_df_names(df,c("stof","tag","month","year","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
   df <- df %>%
@@ -56,6 +58,8 @@ loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug 
 #' @return An R dataframe containing loads per balance term
 loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
   require(dplyr)
+  require(tidyr)
+  
   
   .check_df_names(df,c("stof","tag","month","year","location","term", "richting", "surface_m2") )
   df <- df %>%
@@ -94,6 +98,8 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
 #' @return An R dataframe HRT per Mass balance area
 hrt_swt_meteotype <- function(df, f.meteotype = NULL, debug = F){
   require(dplyr)
+  require(tidyr)
+  
   
   .check_df_names(df,c("stof","tag", "month","year", "meteotype", "meteotype_label","location", "richting", "volume_m3") )
   df <- df %>%
@@ -137,6 +143,7 @@ hrt_swt_meteotype <- function(df, f.meteotype = NULL, debug = F){
 #' @return An R dataframe HRT per Mass balance area
 hrt_swt_month <- function(df, f.meteotype = NULL, debug = F){
   require(dplyr)
+  require(tidyr)
   
   .check_df_names(df,c("stof","tag", "month","year","location", "richting", "volume_m3") )
   df <- df %>%
