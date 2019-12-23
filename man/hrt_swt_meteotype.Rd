@@ -4,10 +4,10 @@
 \alias{hrt_swt_meteotype}
 \title{Compute HRT per Mass balance area per meteotype}
 \usage{
-hrt_swt_meteotype(df.bal, f.meteotype = NULL)
+hrt_swt_meteotype(df, f.meteotype = NULL, debug = F)
 }
 \arguments{
-\item{df.bal}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,<meteotype>, <meteotype_label>,
+\item{df}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,<meteotype>, <meteotype_label>,
 <richting>, <volume_m3>}
 
 \item{f.subs}{filter for substances, by default set to "all" to process all variables available in the <variable> column}

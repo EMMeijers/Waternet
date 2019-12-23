@@ -4,10 +4,10 @@
 \alias{hrt_swt_month}
 \title{Compute HRT per Mass balance area per month}
 \usage{
-hrt_swt_month(df.bal, f.meteotype = NULL)
+hrt_swt_month(df, f.meteotype = NULL, debug = F)
 }
 \arguments{
-\item{df.bal}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
+\item{df}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
 <richting>, <volume_m3>}
 
 \item{f.subs}{filter for substances, by default set to "all" to process all variables available in the <variable> column}

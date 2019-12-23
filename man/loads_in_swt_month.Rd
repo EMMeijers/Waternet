@@ -4,10 +4,10 @@
 \alias{loads_in_swt_month}
 \title{Aggregate loads per Mass balance area, term, substance and month}
 \usage{
-loads_in_swt_month(df.bal, f.subs = "all")
+loads_in_swt_month(df, f.subs = "all", debug = F)
 }
 \arguments{
-\item{df.bal}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,
+\item{df}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>,
 <term>, <richting>, <surface_m2>}
 
 \item{f.subs}{filter for substances, by default set to "all" to process all variables available in the <variable> column}

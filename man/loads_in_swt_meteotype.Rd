@@ -4,10 +4,10 @@
 \alias{loads_in_swt_meteotype}
 \title{Aggregate loads per Mass balance area, term, substance and meteo type}
 \usage{
-loads_in_swt_meteotype(df.bal, f.subs = "all", f.meteotype = NULL)
+loads_in_swt_meteotype(df, f.subs = "all", f.meteotype = NULL, debug = F)
 }
 \arguments{
-\item{df.bal}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>, <meteotype>, <meteotype_label>,
+\item{df}{the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>, <meteotype>, <meteotype_label>,
 <term>, <richting>, <surface_m2>}
 
 \item{f.subs}{filter for substances, by default set to "all" to process all variables available in the <variable> column}
