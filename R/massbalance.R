@@ -78,7 +78,7 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
   df.load <- df %>%
     filter(richting == "In",
            value != 0) %>%
-    group_by(stof,month,year, meteotype_label,location, tag,term, richting, surface_m2) %>%
+    group_by(stof,month,year,location, tag,term, richting, surface_m2) %>%
     summarise(load = sum(value)/(365/12)) %>%
     mutate(eenheid = "g/dag") %>%
     ungroup()
@@ -115,9 +115,9 @@ hrt_swt_meteotype <- function(df, f.meteotype = NULL, debug = F){
   df.HRT <- df %>%
     filter(stof == "Continuity",
            richting != "-") %>%
-    group_by(stof,meteotype,meteotype_label,month,year,location, richting, volume_m3, tag) %>%
+    group_by(stof,meteotype,month,year,location, richting, volume_m3, tag) %>%
     summarise(value = sum(value) / (365/12)) %>%
-    group_by(stof,meteotype,meteotype_label,location, richting,volume_m3, tag) %>%
+    group_by(stof,meteotype,location, richting,volume_m3, tag) %>%
     summarise(m3_dag = mean(value)) %>%
     spread(richting, m3_dag) %>%
     mutate(HRT = round(volume_m3/-Out,2)) %>%
