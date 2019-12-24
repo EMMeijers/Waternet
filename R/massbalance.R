@@ -80,10 +80,13 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
            value != 0) %>%
     group_by(stof,month,year,meteotype_label,location, tag,term, richting, surface_m2) %>%
     summarise(load = sum(value)/(365/12)) %>%
-    mutate(eenheid = "g/dag",
-           decription = "load") %>%
+    mutate(value = round(g_dag * 1000 /surface_m2,2),
+           unit = "mg/dag m2",
+           description = "load") %>%
     rename(variable = stof) %>%
-    ungroup()
+    ungroup() %>%
+    select(variable, description, unit, term,location,tag,year, month, meteotype_label,value,-richting)
+  
   
   return(df.load)
   rm(df.load)
