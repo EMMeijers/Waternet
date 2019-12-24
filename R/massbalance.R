@@ -79,7 +79,7 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
     filter(richting == "In",
            value != 0) %>%
     group_by(stof,month,year,meteotype_label,location, tag,term, richting, surface_m2) %>%
-    summarise(load = sum(value)/(365/12)) %>%
+    summarise(g_dag = sum(value)/(365/12)) %>%
     mutate(value = round(g_dag * 1000 /surface_m2,2),
            unit = "mg/dag m2",
            description = "load") %>%
