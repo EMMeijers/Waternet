@@ -13,7 +13,6 @@ loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug 
   require(dplyr)
   require(tidyr)
   
-  
   .check_df_names(df,c("stof","tag","month","year","location","meteotype","meteotype_label","term", "richting", "surface_m2") )
   df <- df %>%
     mutate(year = year(time)) %>%
@@ -38,10 +37,11 @@ loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug 
     summarise(g_dag = sum(value)/(365/12)) %>%
     group_by(stof,meteotype_label,location,tag,term, richting, surface_m2) %>%
     summarise(g_dag = mean(g_dag)) %>%
-    mutate(load = round(g_dag * 1000 /surface_m2,2),
-           eenheid = "mg/dag m2") %>%
-    select(-g_dag) %>%
-    spread(tag, load) %>%
+    mutate(value = round(g_dag * 1000 /surface_m2,2),
+           unit = "mg/dag m2",
+           description = "load") %>%
+    rename(variable = stof) %>%
+    select(variable, description, unit, location,tag,meteotype_label,value) %>%
     ungroup()
   
   return(df.load)
@@ -80,7 +80,9 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
            value != 0) %>%
     group_by(stof,month,year,meteotype_label,location, tag,term, richting, surface_m2) %>%
     summarise(load = sum(value)/(365/12)) %>%
-    mutate(eenheid = "g/dag") %>%
+    mutate(eenheid = "g/dag",
+           decription = "load") %>%
+    rename(variable = stof) %>%
     ungroup()
   
   return(df.load)
