@@ -41,8 +41,8 @@ loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug 
            unit = "mg/dag m2",
            description = "load") %>%
     rename(variable = stof) %>%
-    select(variable, description, unit, location,tag,meteotype_label,value) %>%
-    ungroup()
+    ungroup() %>%
+    select(variable, description, unit, term,location,tag,meteotype_label,value,-richting)
   
   return(df.load)
   rm(df.load)
