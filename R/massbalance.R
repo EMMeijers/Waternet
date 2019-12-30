@@ -37,12 +37,12 @@ loads_in_swt_meteotype <- function(df, f.subs ="all", f.meteotype = NULL, debug 
     summarise(g_dag = sum(value)/(365/12)) %>%
     group_by(stof,meteotype_label,location,tag,term, richting, surface_m2) %>%
     summarise(g_dag = mean(g_dag)) %>%
-    mutate(value = round(g_dag * 1000 /surface_m2,2),
+    mutate(pload = round(g_dag * 1000 /surface_m2,2),
            unit = "mg/dag m2",
-           description = "load") %>%
+           description = "P load") %>%
     rename(variable = stof) %>%
     ungroup() %>%
-    select(variable, description, unit, term,location,tag,meteotype_label,value,-richting)
+    select(variable, description, unit, term,location, surface_m2,tag,meteotype_label,pload,-richting)
   
   return(df.load)
   rm(df.load)
@@ -80,12 +80,12 @@ loads_in_swt_month <- function(df, f.subs ="all", debug = F) {
            value != 0) %>%
     group_by(stof,month,year,meteotype_label,location, tag,term, richting, surface_m2) %>%
     summarise(g_dag = sum(value)/(365/12)) %>%
-    mutate(value = round(g_dag * 1000 /surface_m2,2),
+    mutate(pload = round(g_dag * 1000 /surface_m2,2),
            unit = "mg/dag m2",
-           description = "load") %>%
+           description = "P load") %>%
     rename(variable = stof) %>%
     ungroup() %>%
-    select(variable, description, unit, term,location,tag,year, month, meteotype_label,value,-richting)
+    select(variable, description, unit, term,location, surface_m2,tag,year, month, meteotype_label,pload,-richting)
   
   
   return(df.load)
