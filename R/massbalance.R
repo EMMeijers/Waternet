@@ -125,7 +125,7 @@ hrt_swt_meteotype <- function(df, f.meteotype = NULL, debug = F){
     group_by(stof,meteotype_label,location, tag, richting,volume_m3 ) %>%
     summarise(m3_dag = mean(value)) %>%
     spread(richting, m3_dag) %>%
-    mutate(HRT = round(volume_m3/-Out,2)) %>%
+    mutate(HRT = round(volume_m3/In,2)) %>%
     ungroup()  
   
   return(df.HRT)
@@ -162,6 +162,65 @@ hrt_swt_month <- function(df, f.meteotype = NULL, debug = F){
   
   return(df.HRT)
   rm(df.HRT)
+}
+
+#' Merge Balance data with meteotype labels.
+#'
+#' Specicific for Waternet:
+#' Function to merge the mass balance dates with the meteotype classification
+#'
+#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
+#' <richting>, <volume_m3>
+#' @param df.periods meteotype dataframe containing <delwaq_time>. 
+merge_bal_periods <- function(df.bal, df.periods) {
+  
+  require(dplyr)
+  require(tidyr)
+  
+  .check_df_names(df.periods,c("delwaq_time"))
+  .check_df_names(df.bal,c("time"))
+  
+  # Add month, year and day labels:
+  df.periods <- df.periods %>%
+    mutate(y_merge = year(delwaq_time),
+           m_merge = month(delwaq_time),
+           d_merge = day(delwaq_time))
+  
+  df.bal <- df.bal %>%
+    mutate(y_merge = year(time),
+           m_merge = month(time),
+           d_merge = day(time))
+  
+  df <- left_join(df.bal, df.periods) %>%
+    select(-delwaq_time,-real_time,-y_merge, -m_merge,-d_merge) %>%
+    mutate(meteotype = as.integer(meteotype)) %>%
+    na.omit()
+  
+  return(df)
+}
+
+#' Merge Balance data with mass balance labels.
+#'
+#' Specicific for Waternet:
+#' Function to merge the mass balance data with the mass balance labels
+#'
+#' @param df.bal the mass balance input dataframe, containing <stof>, <tag>, <month>, <year>, <location>
+#' <richting>, <volume_m3>
+#' @param df.balterms  mass balance labels containing <variable>, <term>, <term_basis>, <stof>, <lokaal>, 
+#' <transport>, <richting>, <type>
+merge_bal_terms <- function(df.bal, df.balterms) {
+  # Select columns in df.balterms:
+  require(dplyr)
+  require(tidyr)
+  
+  .check_df_names(df.balterms,c("variable", "term", "term_basis", "stof", "lokaal", "transport", "richting", "type"))
+  
+  df.balterms <- df.balterms %>%
+    select(variable, term, term_basis, stof, lokaal, transport, richting, type)
+  
+  # Join columns on variable:
+  df <- left_join(df.bal, df.balterms) 
+  return(df)
 }
 
 
