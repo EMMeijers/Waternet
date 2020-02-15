@@ -191,7 +191,7 @@ get_model_data <- function(filename, locs, vars) {
 #'
 #' Function to get modelresults for the same location and variables for multiple runs
 #' 
-#' @param runs dataframe containing columns  <path> and <tag>"
+#' @param runs dataframe containing columns  <filename> and <tag>"
 #' @param filename the name of the file containg the binairy output
 #' @param locs list of locations to be be extracted
 #' @param vars list of variables to be be extracted

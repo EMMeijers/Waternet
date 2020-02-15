@@ -6,7 +6,7 @@
 #' Function to compute cumulative values, i,e. cumulative volumes based on flow values (m3/s) and the dt (s) in the dataset.
 #' Cum values are resetted every year. 
 #'
-#' @param df the input dataframe, containing <time>, <location>, <variable>, <value> values
+#' @param df the input dataframe, containing <time>, <location>, <variable>, <value> and <tag>
 #' @param debug flag for debug output, default = FALSE
 #' @return An R dataframe containing cumnulative values, based on value * dt.
 #' @examples
@@ -24,7 +24,7 @@ cum_values <- function(df, debug = F) {
   require(dplyr)
   require(lubridate)
   
-  .check_df_names(df,c("time", "variable", "location", "value") )
+  .check_df_names(df,c("time", "variable", "location", "value", "tag") )
   df.tmp <- df %>%
     mutate(year = year(time)) %>%
     na.omit()
@@ -67,6 +67,8 @@ cum_values <- function(df, debug = F) {
                    
           list.tmp[[ilist]] <- tmp
           # Increase counter for resullts list
+          if (debug) {print(ilist)}
+          if (debug) {print(nrow(tmp))}
           ilist <- ilist + 1
         }
       }
