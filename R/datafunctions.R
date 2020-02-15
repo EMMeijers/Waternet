@@ -46,7 +46,7 @@ cum_values <- function(df, debug = F) {
   vars <- unique(df.tmp$variable)
   tags <- unique(df.tmp$tag)
   
-  # loop over unique years, locs, vars, runs to obtain yearly cum values.
+  # loop over unique years, locs, vars, tag to obtain yearly cum values.
   list.tmp <- list() 
   ilist <- 1
   for (y in years) {
@@ -64,11 +64,14 @@ cum_values <- function(df, debug = F) {
             arrange(time) %>%
             mutate(value.cum = cumsum(value*dt)) %>%
             select(-year)
-                   
+          if (debug) {print(paste("number of records:",nrow(tmp)))}
+          
           list.tmp[[ilist]] <- tmp
           # Increase counter for resullts list
           if (debug) {print(ilist)}
-          if (debug) {print(nrow(tmp))}
+          if (debug) {print(unique(tmp$tag))}
+          if (debug) {print(unique(tmp$variable))}
+          if (debug) {print(unique(tmp$location))}
           ilist <- ilist + 1
         }
       }
