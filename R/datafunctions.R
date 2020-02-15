@@ -53,14 +53,14 @@ cum_values <- function(df, debug = F) {
     if (debug) {print(y)}
     for (loc in locs) {
       for (var in vars) {
-        for (tag in tags) {
+        for (t in tags) {
           if (debug) {print(tag)}
           
           tmp <- df.tmp %>%
             filter(year == y,
                    location == loc,
                    variable == var,
-                   tag == tag) %>%
+                   tag == t) %>%
             arrange(time) %>%
             mutate(value.cum = cumsum(value*dt)) %>%
             select(-year)
