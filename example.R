@@ -59,7 +59,7 @@ library(Waternet)
 submod <- c("OXY")
 locmod <- c("LOX010")
 df <- get_model_data("DATA/testdata.his", locmod, submod)
-                     
+df$tag <- "label"                     
 df.cum <- cum_values(df, debug=F)
 library(ggplot2)
 plot <- ggplot(df.cum, aes(time, value.cum)) +
@@ -93,11 +93,10 @@ locs <- get_his_locs("DATA/testdata.his")
 vars <- get_his_vars("DATA/testdata.his")
 
 library(Waternet)
-tmp <- OpenHISFile("DATA/testdata.his")
-tmp$Header
-tmp$T0
-tmp$TUnit
-tmp$TStep
+nc <- "Data/test_his.nc"
+df <- getNcTimeSeries(test,"discharge_magnitude","station_id")
+library(ggplot2)
+plot <- ggplot(df, aes(x = datetime, y = value, col = location)) + 
+  geom_line()
+plot
 
-
-df <- ReadHISFile()

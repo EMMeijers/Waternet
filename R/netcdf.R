@@ -1,11 +1,12 @@
 #' Function to get absolute times from nc file. 
 #' 
-#' @param nc netcdf file.
+#' @param filename netcdf file.
 #' @return dataframe containing the absolute times from \code{nc}
 #' @example 
 #' 
-getNcAbsTimes <- function(nc) {
-  
+getNcAbsTimes <- function(filename) {
+  require(ncdf4)
+  nc <- nc_open(filename)
   # Get unit
   t.unit <- nc$dim$time$units
   
@@ -27,7 +28,7 @@ getNcAbsTimes <- function(nc) {
 #'
 #' Function to get modelresults for the same location and variables for multiple runs
 #' 
-#' @param nc netcdf file.
+#' @param filename netcdf file.
 #' @param var variable to be be extracted
 #' @param obj list of variables to be be extracted
 #' @return A dataframe with model output values for \code{var} and \code{obj} for each time step.
@@ -35,10 +36,15 @@ getNcAbsTimes <- function(nc) {
 #' library(Waternet)
 #' df <- getNcTimeSeries(nc.his, "discharge_magnitude","station_id")
 #' library(ggplot2)
-#' plot <- ggplot(df.o, aes(x = datetime, y = value, col = location)) + 
+#' plot <- ggplot(df, aes(x = datetime, y = value, col = location)) + 
 #'   geom_line()
 #' plot
-getNcTimeSeries <- function(nc, var, obj) {
+getNcTimeSeries <- function(filename, var, obj) {
+  
+  require(ncdf4)
+  require(tidyverse)
+  
+  nc <- nc_open(filename)
   #Get times:
   times <- getNcAbsTimes(nc)
   
