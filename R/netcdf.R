@@ -35,7 +35,7 @@ getNcAbsTimes <- function(nc) {
 #' library(Waternet)
 #' df <- getNcTimeSeries(nc.his, "discharge_magnitude","station_id")
 #' library(ggplot2)
-#' plot <- ggplot(df.o, aes(x = datetime, y = value, col = location)) + 
+#' plot <- ggplot(df, aes(x = datetime, y = value, col = location)) + 
 #'   geom_line()
 #' plot
 getNcTimeSeries <- function(nc, var, obj) {
